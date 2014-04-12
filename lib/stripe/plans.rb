@@ -4,7 +4,7 @@ module Stripe
 
     configuration_for :plan do
       attr_reader :currency
-      attr_accessor :name, :amount, :interval, :interval_count, :trial_period_days
+      attr_accessor :name, :amount, :interval, :interval_count, :trial_period_days, :metadata
 
       validates_presence_of :id, :name, :amount
       validates_inclusion_of :interval, :in => %w(week month year), :message => "'%{value}' is not one of 'week', 'month' or 'year'"
@@ -14,6 +14,7 @@ module Stripe
         @currency = 'usd'
         @interval_count = 1
         @trial_period_days = 0
+        @metadata ||= {}
       end
 
       def create_options
@@ -23,7 +24,8 @@ module Stripe
           :amount => @amount,
           :interval => @interval,
           :interval_count => @interval_count,
-          :trial_period_days => @trial_period_days
+          :trial_period_days => @trial_period_days,
+          :metadata => @metadata
         }
       end
     end
